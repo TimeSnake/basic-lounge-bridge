@@ -4,7 +4,7 @@ name: basic-lounge-bridge
 author: timesnake
 database: true
 depend: [ basic-bukkit ]
-api-version: 1.13
+api-version: 1.21
 
 commands:
   stats_discard:
