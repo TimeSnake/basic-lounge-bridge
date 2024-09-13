@@ -12,8 +12,8 @@ import de.timesnake.basic.bukkit.util.world.entity.PacketPlayer;
 import de.timesnake.library.basic.util.Tuple;
 import de.timesnake.library.entities.entity.PlayerBuilder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.player.Player;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
@@ -51,11 +51,10 @@ public class DeadPlayer {
   }
 
   public void spawn() {
-
-    Player deadBody = PlayerBuilder.ofName(this.name, this.textures.getA(), this.textures.getB())
+    ServerPlayer deadBody = PlayerBuilder.ofName(this.name, this.textures.getA(), this.textures.getB())
         .applyOnEntity(e -> {
           e.setLevel(this.location.getExWorld().getHandle());
-          e.setPos(this.location.getX(), this.location.getY() + 0.2, this.location.getZ());
+          e.setPos(this.location.getX(), this.location.getY() + 0.4, this.location.getZ());
           e.setRot(this.location.getYaw(), this.location.getPitch());
           e.setNoGravity(true);
           e.setCustomName(Component.literal(this.name + " (dead)"));
@@ -66,7 +65,6 @@ public class DeadPlayer {
         .build();
 
     this.bodyEntity = new PacketPlayer(deadBody, this.location);
-
     Server.getEntityManager().registerEntity(this.bodyEntity);
   }
 
