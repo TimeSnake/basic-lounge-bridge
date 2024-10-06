@@ -325,6 +325,7 @@ public abstract class GameUser extends StatUser {
     if (this.respawnTask != null) {
       this.respawnTask.cancel();
     }
+    this.getEnderChest().clear();
     this.onGameStop();
   }
 
