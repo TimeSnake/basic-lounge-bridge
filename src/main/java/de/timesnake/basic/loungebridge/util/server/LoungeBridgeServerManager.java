@@ -18,6 +18,7 @@ import de.timesnake.basic.loungebridge.core.*;
 import de.timesnake.basic.loungebridge.core.main.BasicLoungeBridge;
 import de.timesnake.basic.loungebridge.util.game.ResetableMap;
 import de.timesnake.basic.loungebridge.util.game.TmpGame;
+import de.timesnake.basic.loungebridge.util.tool.TaskManager;
 import de.timesnake.basic.loungebridge.util.tool.ToolManager;
 import de.timesnake.basic.loungebridge.util.tool.scheduler.*;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
@@ -37,6 +38,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -76,6 +78,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
   private GameScheduler gameScheduler;
   private TablistManager tablistManager;
   private DiscordManager discordManager;
+  private TaskManager taskManager;
 
   public final void onLoungeBridgeEnable() {
     this.toolManager = this.initToolManager();
@@ -132,6 +135,9 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
     }
     this.tablistManager.loadTablist(Tablist.Type.DUMMY);
     Server.getScoreboardManager().setActiveTablist(this.tablistManager.getGameTablist());
+
+    this.taskManager = new TaskManager();
+    this.toolManager.add(this.taskManager);
 
     this.toolManager.add((StartableTool) () -> Server.getInGameUsers()
         .forEach(u -> ((GameUser) u).onGameStart()));
@@ -531,5 +537,9 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
   public Integer getStartPlayers() {
     return startPlayers != null ? startPlayers : this.getEstimatedPlayers();
+  }
+
+  public BukkitTask addGameTask(BukkitTask task) {
+    return this.taskManager.addTask(task);
   }
 }

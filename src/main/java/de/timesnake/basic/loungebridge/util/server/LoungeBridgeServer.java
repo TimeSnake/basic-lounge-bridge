@@ -24,6 +24,7 @@ import de.timesnake.library.basic.util.TimeCoins;
 import de.timesnake.library.basic.util.statistics.StatType;
 import de.timesnake.library.chat.Plugin;
 import net.kyori.adventure.text.Component;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -264,6 +265,10 @@ public abstract class LoungeBridgeServer extends GameServer {
 
   public static Sideboard getGameSideboard() {
     return server.getGameSideboard();
+  }
+
+  public static BukkitTask addGameTask(BukkitTask task) {
+    return server.addGameTask(task);
   }
 
   private static final LoungeBridgeServerManager<?> server = LoungeBridgeServerManager.getInstance();
