@@ -6,11 +6,9 @@ package de.timesnake.basic.loungebridge.core;
 
 import com.destroystokyo.paper.event.player.PlayerStopSpectatingEntityEvent;
 import de.timesnake.basic.bukkit.util.Server;
-import de.timesnake.basic.bukkit.util.chat.Chat;
 import de.timesnake.basic.bukkit.util.user.User;
 import de.timesnake.basic.bukkit.util.user.event.*;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
-import de.timesnake.basic.game.util.server.GameServer;
 import de.timesnake.basic.game.util.user.SpectatorUser;
 import de.timesnake.basic.game.util.user.TeamUser;
 import de.timesnake.basic.loungebridge.core.main.BasicLoungeBridge;
@@ -74,40 +72,11 @@ public class UserManager implements Listener {
       LoungeBridgeServer.onGameUserRejoin(user);
       LoungeBridgeServer.getToolManager().applyOnTools(GameUserJoinListener.class, t -> t.onGameUserJoin(user));
     } else if (task != null && task.equalsIgnoreCase(LoungeBridgeServer.getGame().getName())
-        && user.hasStatus(Status.User.PRE_GAME)) {
-
-      user.getInventory().clear();
-      user.heal();
-      user.setInvulnerable(false);
-      user.setAllowFlight(false);
-      user.setFlying(false);
-      user.setGravity(true);
-      user.setFlySpeed((float) 0.2);
-      user.setWalkSpeed((float) 0.2);
-      user.setGameMode(GameMode.ADVENTURE);
-      user.setFireTicks(0);
-      user.removePotionEffects();
-
-      user.updateTeam();
-
-      if (user.getTeam() != null && user.getTeam().hasPrivateChat() && LoungeBridgeServer.getServerTeamAmount() > 0) {
-        Chat teamChat = Server.getChat(user.getTeam().getName());
-        if (teamChat != null) {
-          teamChat.addWriter(user);
-          teamChat.addListener(user);
-          Server.getGlobalChat().removeWriter(user);
-        }
-      }
-
-      user.setSideboard(GameServer.getGameSideboard());
+               && user.hasStatus(Status.User.PRE_GAME)) {
 
       user.joinGame();
-      user.applyKit();
-
       LoungeBridgeServer.getToolManager().applyOnTools(GameUserJoinListener.class, t -> t.onGameUserJoin(user));
-
       LoungeBridgeServer.checkGameStart();
-
       LoungeBridgeServer.updateSpectatorTools();
     } else {
       user.setStatus(Status.User.SPECTATOR);

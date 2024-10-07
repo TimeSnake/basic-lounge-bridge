@@ -5,18 +5,20 @@
 package de.timesnake.basic.loungebridge.util.user;
 
 import de.timesnake.basic.bukkit.util.Server;
+import de.timesnake.basic.bukkit.util.chat.Chat;
 import de.timesnake.basic.bukkit.util.user.UserDamage;
 import de.timesnake.basic.bukkit.util.user.scoreboard.TablistGroup;
 import de.timesnake.basic.bukkit.util.user.scoreboard.TablistGroupType;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.game.util.game.Team;
+import de.timesnake.basic.game.util.server.GameServer;
 import de.timesnake.basic.game.util.user.StatUser;
 import de.timesnake.basic.loungebridge.core.main.BasicLoungeBridge;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServer;
 import de.timesnake.basic.loungebridge.util.tool.listener.GameUserQuitListener;
 import de.timesnake.basic.loungebridge.util.tool.listener.SpectatorUserJoinListener;
 import de.timesnake.library.basic.util.Status;
-import de.timesnake.library.network.NetworkVariables;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -59,13 +61,38 @@ public abstract class GameUser extends StatUser {
     }
   }
 
-  @Override
-  public void onQuit() {
-    super.onQuit();
-    if (LoungeBridgeServer.getGame().hasTexturePack()) {
-      this.setResourcePack(Server.getNetwork().getVariables().getValue(NetworkVariables.DEFAULT_RESOURCE_PACK_LINK),
-          Server.getNetwork().getVariables().getValue(NetworkVariables.DEFAULT_RESOURCE_PACK_HASH), true);
+  public void joinGame() {
+
+    this.getInventory().clear();
+    this.heal();
+    this.setInvulnerable(false);
+    this.setAllowFlight(false);
+    this.setFlying(false);
+    this.setGravity(true);
+    this.setFlySpeed((float) 0.2);
+    this.setWalkSpeed((float) 0.2);
+    this.setGameMode(GameMode.ADVENTURE);
+    this.setFireTicks(0);
+    this.removePotionEffects();
+
+    this.updateTeam();
+
+    if (this.getTeam() != null && this.getTeam().hasPrivateChat() && LoungeBridgeServer.getServerTeamAmount() > 0) {
+      Chat teamChat = Server.getChat(this.getTeam().getName());
+      if (teamChat != null) {
+        teamChat.addWriter(this);
+        teamChat.addListener(this);
+        Server.getGlobalChat().removeWriter(this);
+      }
     }
+
+    this.setSideboard(GameServer.getGameSideboard());
+
+    this.setResourcePack(LoungeBridgeServer.getGame().getTexturePackLink(),
+        LoungeBridgeServer.getGame().getTexturePackHash(), true);
+
+    this.onGameJoin();
+    this.applyKit();
   }
 
   @Override
@@ -315,10 +342,6 @@ public abstract class GameUser extends StatUser {
    */
   public float getGameCoins() {
     return gameCoins;
-  }
-
-  public final void joinGame() {
-    this.onGameJoin();
   }
 
   public final void stopGame() {

@@ -32,7 +32,6 @@ import de.timesnake.database.util.server.DbLoungeServer;
 import de.timesnake.database.util.server.DbTmpGameServer;
 import de.timesnake.library.basic.util.Status;
 import de.timesnake.library.chat.ExTextColor;
-import de.timesnake.library.network.NetworkVariables;
 import net.kyori.adventure.text.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -369,8 +368,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
       }
 
       if (LoungeBridgeServer.getGame().hasTexturePack()) {
-        user.setResourcePack(Server.getNetwork().getVariables().getValue(NetworkVariables.DEFAULT_RESOURCE_PACK_LINK),
-            Server.getNetwork().getVariables().getValue(NetworkVariables.DEFAULT_RESOURCE_PACK_HASH), true);
+        user.removeResourcePacks();
       }
 
       user.switchToServer(LoungeBridgeServer.getTwinServer());
