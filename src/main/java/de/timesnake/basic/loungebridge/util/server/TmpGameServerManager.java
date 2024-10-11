@@ -128,7 +128,7 @@ public interface TmpGameServerManager {
   }
 
   default void saveGameUserStats(GameUser user) {
-    user.getStat(GAMES_PLAYED).increaseAll(1);
+    user.getStat(GAMES_PLAYED).increaseAllBy(1);
   }
 
 }

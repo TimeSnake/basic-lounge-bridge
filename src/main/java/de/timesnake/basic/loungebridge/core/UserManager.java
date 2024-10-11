@@ -167,6 +167,7 @@ public class UserManager implements Listener {
       e.setRespawnLocation(respawnLoc.get());
     }
 
+    user.addRespawn();
     user.respawn();
   }
 

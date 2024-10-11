@@ -31,16 +31,17 @@ public abstract class GameUser extends StatUser {
 
   protected Kit kit;
 
-  protected Integer kills = 0;
-  protected Integer killStreak = 0;
-  protected Integer highestKillStreak = 0;
-  protected Integer deaths = 0;
+  protected int kills = 0;
+  protected int killStreak = 0;
+  protected int highestKillStreak = 0;
+  protected int deaths = 0;
+  protected int respawns = 0;
 
-  protected Integer bowShots = 0;
-  protected Integer bowHitTarget = 0;
-  protected Integer bowHits = 0;
+  protected int bowShots = 0;
+  protected int bowHitTarget = 0;
+  protected int bowHits = 0;
 
-  protected Integer longestShot = 0;
+  protected int longestShot = 0;
 
   protected boolean kitLoaded = false;
 
@@ -88,8 +89,10 @@ public abstract class GameUser extends StatUser {
 
     this.setSideboard(GameServer.getGameSideboard());
 
-    this.setResourcePack(LoungeBridgeServer.getGame().getTexturePackLink(),
-        LoungeBridgeServer.getGame().getTexturePackHash(), true);
+    if (LoungeBridgeServer.getGame().hasTexturePack()) {
+      this.setResourcePack(LoungeBridgeServer.getGame().getTexturePackLink(),
+          LoungeBridgeServer.getGame().getTexturePackHash(), true);
+    }
 
     this.onGameJoin();
     this.applyKit();
@@ -162,7 +165,7 @@ public abstract class GameUser extends StatUser {
     kit.getApplier().forEach(a -> a.accept(this));
   }
 
-  public Integer getKills() {
+  public int getKills() {
     return kills;
   }
 
@@ -170,11 +173,11 @@ public abstract class GameUser extends StatUser {
     this.kills = kills;
   }
 
-  public Integer getKillStreak() {
+  public int getKillStreak() {
     return this.killStreak;
   }
 
-  public Integer getHighestKillStreak() {
+  public int getHighestKillStreak() {
     return this.highestKillStreak;
   }
 
@@ -190,11 +193,11 @@ public abstract class GameUser extends StatUser {
     LoungeBridgeServer.broadcastGameTDMessage(this.getTDChatName() + "§p has a kill-streak of §v" + this.killStreak);
   }
 
-  public Integer getDeaths() {
+  public int getDeaths() {
     return deaths;
   }
 
-  public void setDeaths(Integer deaths) {
+  public void setDeaths(int deaths) {
     this.deaths = deaths;
     if (this.killStreak > this.highestKillStreak) {
       this.highestKillStreak = this.killStreak;
@@ -257,15 +260,15 @@ public abstract class GameUser extends StatUser {
     }
   }
 
-  public Double getKillDeathRatio() {
+  public double getKillDeathRatio() {
     return this.kills / ((double) this.deaths);
   }
 
-  public Integer getBowShots() {
+  public int getBowShots() {
     return bowShots;
   }
 
-  public void setBowShots(Integer bowShots) {
+  public void setBowShots(int bowShots) {
     this.bowShots = bowShots;
   }
 
@@ -273,11 +276,11 @@ public abstract class GameUser extends StatUser {
     this.bowShots++;
   }
 
-  public Integer getBowHitTarget() {
+  public int getBowHitTarget() {
     return bowHitTarget;
   }
 
-  public void setBowHitTarget(Integer bowHitTarget) {
+  public void setBowHitTarget(int bowHitTarget) {
     this.bowHitTarget = bowHitTarget;
   }
 
@@ -285,11 +288,11 @@ public abstract class GameUser extends StatUser {
     this.bowHitTarget++;
   }
 
-  public Integer getBowHits() {
+  public int getBowHits() {
     return this.bowHits;
   }
 
-  public void setBowHits(Integer bowHits) {
+  public void setBowHits(int bowHits) {
     this.bowHits = bowHits;
   }
 
@@ -297,7 +300,7 @@ public abstract class GameUser extends StatUser {
     this.bowHits++;
   }
 
-  public boolean checkLongestShot(Integer distance) {
+  public boolean checkLongestShot(int distance) {
     if (this.longestShot < distance) {
       this.longestShot = distance;
       return true;
@@ -305,7 +308,7 @@ public abstract class GameUser extends StatUser {
     return false;
   }
 
-  public Integer getLongestShot() {
+  public int getLongestShot() {
     return longestShot;
   }
 
@@ -350,6 +353,14 @@ public abstract class GameUser extends StatUser {
     }
     this.getEnderChest().clear();
     this.onGameStop();
+  }
+
+  public void addRespawn() {
+    this.respawns++;
+  }
+
+  public int getRespawns() {
+    return respawns;
   }
 
   /**
