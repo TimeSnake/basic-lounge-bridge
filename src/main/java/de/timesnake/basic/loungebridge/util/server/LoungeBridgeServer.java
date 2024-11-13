@@ -17,6 +17,7 @@ import de.timesnake.basic.loungebridge.core.DiscordManager;
 import de.timesnake.basic.loungebridge.util.game.TmpGame;
 import de.timesnake.basic.loungebridge.util.tool.ToolManager;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
+import de.timesnake.basic.loungebridge.util.user.GameUserManager;
 import de.timesnake.basic.loungebridge.util.user.OfflineUser;
 import de.timesnake.basic.loungebridge.util.user.TablistTeam;
 import de.timesnake.database.util.server.DbLoungeServer;
@@ -269,6 +270,10 @@ public abstract class LoungeBridgeServer extends GameServer {
 
   public static BukkitTask addGameTask(BukkitTask task) {
     return server.addGameTask(task);
+  }
+
+  public static GameUserManager getGameUserManager() {
+    return server.getGameUserManager();
   }
 
   private static final LoungeBridgeServerManager<?> server = LoungeBridgeServerManager.getInstance();

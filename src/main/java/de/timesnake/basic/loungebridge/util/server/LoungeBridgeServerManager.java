@@ -22,6 +22,7 @@ import de.timesnake.basic.loungebridge.util.tool.TaskManager;
 import de.timesnake.basic.loungebridge.util.tool.ToolManager;
 import de.timesnake.basic.loungebridge.util.tool.scheduler.*;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
+import de.timesnake.basic.loungebridge.util.user.GameUserManager;
 import de.timesnake.basic.loungebridge.util.user.Kit;
 import de.timesnake.basic.loungebridge.util.user.TablistTeam;
 import de.timesnake.channel.util.message.ChannelServerMessage;
@@ -78,6 +79,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
   private TablistManager tablistManager;
   private DiscordManager discordManager;
   private TaskManager taskManager;
+  private GameUserManager gameUserManager;
 
   public final void onLoungeBridgeEnable() {
     this.toolManager = this.initToolManager();
@@ -143,6 +145,8 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
     this.toolManager.add((StopableTool) () -> Server.getInGameUsers()
         .forEach(u -> ((GameUser) u).stopGame()));
+
+    this.gameUserManager = new GameUserManager();
 
     // load maps, if enabled
     if (this.mapsEnabled) {
@@ -539,5 +543,9 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
   public BukkitTask addGameTask(BukkitTask task) {
     return this.taskManager.addTask(task);
+  }
+
+  public GameUserManager getGameUserManager() {
+    return gameUserManager;
   }
 }
