@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class WorldDestroyer implements PreStopableTool {
@@ -40,8 +39,8 @@ public class WorldDestroyer implements PreStopableTool {
 
   private void destroyBlocks() {
     int i = 0;
-    List<ExBlock> blocksToDestroy = new ArrayList<>(this.polygon.getSolidBlocksInside());
-    Collections.shuffle(blocksToDestroy);
+    List<ExBlock> blocksToDestroy =
+        new ArrayList<>(this.polygon.getBlocksInsideSortedByDistanceToCenter(b -> !b.getType().isEmpty())).reversed();
     for (ExBlock block : blocksToDestroy) {
       if (i >= this.blocksToDestroyPerPeriod) {
         break;
