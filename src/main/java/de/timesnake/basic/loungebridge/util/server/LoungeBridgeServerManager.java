@@ -134,7 +134,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
     if (this.tablistManager == null) {
       this.tablistManager = new TablistManager();
     }
-    this.tablistManager.loadTablist(Tablist.Type.DUMMY);
+    this.tablistManager.loadTablist(Tablist.Type.BLANK);
     Server.getScoreboardManager().setActiveTablist(this.tablistManager.getGameTablist());
 
     this.taskManager = new TaskManager();
