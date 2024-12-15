@@ -325,19 +325,20 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
       this.toolManager.runTools(CloseableTool.class);
 
       for (User user : Server.getInGameUsers()) {
-        user.setDefault();
+        user.resetPlayerProperties();
+        user.setAllowFlight(true);
+        user.setFlying(true);
         user.getPlayer().setInvulnerable(true);
-        user.lockLocation();
-      }
-
-      for (User user : Server.getSpectatorUsers()) {
-        user.clearInventory();
       }
 
       this.getLoungeBridgeUserManager().clearRejoinUsers();
 
       Chat specChat = this.getSpectatorChat();
       for (User user : Server.getUsers()) {
+        user.closeInventory();
+        user.clearInventory();
+        user.unlockAll();
+
         if (((GameUser) user).getTeam() != null) {
           Chat teamChat = Server.getChat(((GameUser) user).getTeam().getName());
           if (teamChat != null) {
@@ -351,7 +352,6 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
         Server.getGlobalChat().addWriter(user);
         Server.getGlobalChat().addListener(user);
-        user.clearInventory();
       }
 
       this.getSpectatorManager().clearTools();
