@@ -290,6 +290,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
     Server.getInGameUsers().forEach(u -> ((GameUser) u).playedGame());
 
     this.startPlayers = Server.getInGameUsers().size();
+    this.logger.info("Starting with {} players", this.startPlayers);
 
     this.toolManager.runTools(StartableTool.class);
 

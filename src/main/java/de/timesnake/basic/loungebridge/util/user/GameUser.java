@@ -63,7 +63,6 @@ public abstract class GameUser extends StatUser {
   }
 
   public void joinGame() {
-
     this.getInventory().clear();
     this.heal();
     this.setInvulnerable(false);
@@ -75,8 +74,7 @@ public abstract class GameUser extends StatUser {
     this.setGameMode(GameMode.ADVENTURE);
     this.setFireTicks(0);
     this.removePotionEffects();
-
-    this.updateTeam();
+    this.setStatus(Status.User.PRE_GAME);
 
     if (this.getTeam() != null && this.getTeam().hasPrivateChat() && LoungeBridgeServer.getServerTeamAmount() > 0) {
       Chat teamChat = Server.getChat(this.getTeam().getName());
