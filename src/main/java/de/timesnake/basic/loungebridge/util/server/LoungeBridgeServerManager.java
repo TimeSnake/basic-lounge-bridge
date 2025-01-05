@@ -324,17 +324,15 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
       this.toolManager.runTools(CloseableTool.class);
 
-      for (User user : Server.getInGameUsers()) {
-        user.resetPlayerProperties();
-        user.setAllowFlight(true);
-        user.setFlying(true);
-        user.getPlayer().setInvulnerable(true);
-      }
-
       this.getLoungeBridgeUserManager().clearRejoinUsers();
 
       Chat specChat = this.getSpectatorChat();
       for (User user : Server.getUsers()) {
+        user.resetPlayerProperties();
+        user.setAllowFlight(true);
+        user.setFlying(true);
+        user.getPlayer().setInvulnerable(true);
+
         user.closeInventory();
         user.clearInventory();
         user.unlockAll();

@@ -14,7 +14,6 @@ import de.timesnake.library.entities.entity.PlayerBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Pose;
-import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
@@ -42,7 +41,7 @@ public class DeadPlayer {
     return name;
   }
 
-  public Location getLocation() {
+  public ExLocation getLocation() {
     return location;
   }
 

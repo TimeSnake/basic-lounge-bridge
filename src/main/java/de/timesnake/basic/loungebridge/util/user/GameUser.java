@@ -96,6 +96,14 @@ public abstract class GameUser extends StatUser {
     this.applyKit();
   }
 
+  public final void stopGame() {
+    if (this.respawnTask != null) {
+      this.respawnTask.cancel();
+    }
+    this.getEnderChest().clear();
+    this.onGameStop();
+  }
+
   @Override
   public TablistGroup getTablistGroup(TablistGroupType type) {
     if (de.timesnake.basic.game.util.game.TablistGroupType.GAME_TEAM.equals(type)) {
@@ -343,14 +351,6 @@ public abstract class GameUser extends StatUser {
    */
   public float getGameCoins() {
     return gameCoins;
-  }
-
-  public final void stopGame() {
-    if (this.respawnTask != null) {
-      this.respawnTask.cancel();
-    }
-    this.getEnderChest().clear();
-    this.onGameStop();
   }
 
   public void addRespawn() {

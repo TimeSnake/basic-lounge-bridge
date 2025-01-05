@@ -61,7 +61,7 @@ public abstract class BossBarMapTimerTool extends MapTimerTool implements Watcha
       }
     }
 
-    if (this.time % 60 == 0 || this.time == 30 || this.time == 10 || this.time == 5) {
+    if (this.time > 0 && (this.time % 60 == 0 || this.time == 30 || this.time == 10 || this.time <= 5)) {
       String msg = this.getChatMessage(Chat.getTimeString(this.time));
       if (msg != null) {
         LoungeBridgeServer.broadcastGameTDMessage(msg);
@@ -119,6 +119,10 @@ public abstract class BossBarMapTimerTool extends MapTimerTool implements Watcha
   public abstract String getTitle(String time);
 
   public String getChatMessage(String time) {
+    return null;
+  }
+
+  public String getEndChatMessage() {
     return null;
   }
 
