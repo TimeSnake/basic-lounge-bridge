@@ -1,5 +1,5 @@
 main: de.timesnake.basic.loungebridge.core.main.BasicLoungeBridge
-version: 1.6.0
+version: ${version}
 name: basic-lounge-bridge
 author: timesnake
 database: true
