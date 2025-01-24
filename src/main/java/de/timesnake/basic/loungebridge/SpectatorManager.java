@@ -29,7 +29,7 @@ public class SpectatorManager extends de.timesnake.basic.game.util.user.Spectato
   }
 
   @Override
-  public boolean loadTools() {
+  public boolean loadSpectatorTools() {
     return !LoungeBridgeServer.getState().equals(LoungeBridgeServer.State.CLOSING)
         && !LoungeBridgeServer.getState().equals(LoungeBridgeServer.State.STOPPED);
   }

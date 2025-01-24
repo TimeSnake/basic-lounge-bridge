@@ -46,6 +46,7 @@ public abstract class GameUser extends StatUser {
   protected boolean kitLoaded = false;
 
   private boolean playedGame = false;
+  private boolean gameWinner = false;
 
   private float gameCoins = 0;
 
@@ -169,6 +170,14 @@ public abstract class GameUser extends StatUser {
 
     this.kit = kit;
     kit.getApplier().forEach(a -> a.accept(this));
+  }
+
+  public void setGameWinner() {
+    this.gameWinner = true;
+  }
+
+  public boolean isGameWinner() {
+    return gameWinner;
   }
 
   public int getKills() {
