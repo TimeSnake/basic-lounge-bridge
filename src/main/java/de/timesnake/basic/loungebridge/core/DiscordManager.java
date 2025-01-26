@@ -305,6 +305,11 @@ public class DiscordManager implements Listener, PreStopableTool, StartableTool,
 
   }
 
+  @Override
+  public int getPriority() {
+    return 5;
+  }
+
   enum Action {
     ADD,
     REMOVE,

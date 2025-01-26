@@ -8,6 +8,7 @@ import de.timesnake.basic.bukkit.util.user.User;
 import de.timesnake.basic.bukkit.util.user.scoreboard.Sideboard;
 import de.timesnake.basic.bukkit.util.world.ExLocation;
 import de.timesnake.basic.bukkit.util.world.ExWorld;
+import de.timesnake.basic.loungebridge.util.tool.GameTool;
 import de.timesnake.basic.loungebridge.util.user.GameUser;
 import de.timesnake.basic.loungebridge.util.user.OfflineUser;
 import de.timesnake.library.basic.util.statistics.IntegerStat;
@@ -54,7 +55,18 @@ public interface TmpGameServerManager {
   }
 
   /**
-   * Countdown 0s
+   * Called on game start.
+   * <p>
+   * But before all {@link GameTool}s, especially the {@link GameUser#onGameStart()} method.
+   */
+  default void onBeforeGameStart() {
+
+  }
+
+  /**
+   * Called on game start.
+   * <p>
+   * But after all {@link GameTool}s, especially the {@link GameUser#onGameStart()} method.
    */
   void onGameStart();
 

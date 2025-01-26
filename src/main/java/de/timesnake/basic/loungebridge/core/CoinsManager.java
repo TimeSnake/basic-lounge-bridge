@@ -54,6 +54,11 @@ public class CoinsManager implements ResetableTool, PreCloseableTool, StopableTo
     this.saveGameCoins();
   }
 
+  @Override
+  public int getPriority() {
+    return 5;
+  }
+
   public boolean isSaveCoins() {
     return saveCoins;
   }

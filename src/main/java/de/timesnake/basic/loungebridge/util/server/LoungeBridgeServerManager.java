@@ -58,7 +58,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
     return (LoungeBridgeServerManager<?>) ServerManager.getInstance();
   }
 
-  private Logger logger = LogManager.getLogger("lounge-bridge.server");
+  private final Logger logger = LogManager.getLogger("lounge-bridge.server");
 
   protected DbLoungeServer twinServer;
 
@@ -113,7 +113,7 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
       this.toolManager.add(statsManager);
     }
 
-    CoinsManager coinsManager = new CoinsManager();
+    CoinsManager coinsManager = this.initCoinsManager();
     this.toolManager.add(coinsManager);
 
     this.mapsEnabled = ((DbTmpGameServer) this.getDatabase()).areMapsEnabled();
@@ -140,11 +140,32 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
     this.taskManager = new TaskManager();
     this.toolManager.add(this.taskManager);
 
-    this.toolManager.add((StartableTool) () -> Server.getInGameUsers()
-        .forEach(u -> ((GameUser) u).onGameStart()));
+    this.toolManager.add(new StartableTool() {
+      @Override
+      public void start() {
+        for (User u : Server.getInGameUsers()) {
+          ((GameUser) u).playedGame();
+          ((GameUser) u).onGameStart();
+        }
+      }
 
-    this.toolManager.add((StopableTool) () -> Server.getInGameUsers()
-        .forEach(u -> ((GameUser) u).stopGame()));
+      @Override
+      public int getPriority() {
+        return 0;
+      }
+    });
+
+    this.toolManager.add(new StopableTool() {
+      @Override
+      public void stop() {
+        Server.getInGameUsers().forEach(u -> ((GameUser) u).stopGame());
+      }
+
+      @Override
+      public int getPriority() {
+        return 0;
+      }
+    });
 
     this.gameUserManager = new GameUserManager();
 
@@ -196,20 +217,14 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
   }
 
   public void loadChats() {
-    // create team chat
     for (Team team : this.getGame().getTeams()) {
-      // chat
       if (team.hasPrivateChat()) {
-        Server.getChatManager()
-            .createChat(team.getName(), team.getDisplayName(), team.getTextColor(),
-                new HashSet<>());
+        Server.getChatManager().createChat(team.getName(), team.getDisplayName(), team.getTextColor(), new HashSet<>());
       }
     }
 
-    // create spectator chat
-    Server.getChatManager()
-        .createChat(SPECTATOR_NAME, SPECTATOR_CHAT_DISPLAY_NAME, SPECTATOR_CHAT_COLOR,
-            new HashSet<>());
+    Server.getChatManager().createChat(SPECTATOR_NAME, SPECTATOR_CHAT_DISPLAY_NAME, SPECTATOR_CHAT_COLOR,
+        new HashSet<>());
   }
 
   @Override
@@ -274,7 +289,6 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
   public final void startGame() {
     LoungeBridgeServer.setState(LoungeBridgeServer.State.RUNNING);
-
     this.running = true;
 
     for (User user : Server.getPreGameUsers()) {
@@ -287,16 +301,15 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
       return;
     }
 
-    Server.getInGameUsers().forEach(u -> ((GameUser) u).playedGame());
-
     this.startPlayers = Server.getInGameUsers().size();
     this.logger.info("Starting with {} players", this.startPlayers);
-
-    this.toolManager.runTools(StartableTool.class);
 
     Server.getChat().setBroadcastJoinQuit(true);
 
     this.logger.info("Game started");
+
+    this.onBeforeGameStart();
+    this.toolManager.runTools(StartableTool.class);
     this.onGameStart();
   }
 
@@ -328,14 +341,14 @@ public abstract class LoungeBridgeServerManager<Game extends TmpGame> extends
 
       Chat specChat = this.getSpectatorChat();
       for (User user : Server.getUsers()) {
+        user.closeInventory();
+        user.clearInventory();
+        user.unlockAll();
+
         user.resetPlayerProperties();
         user.setAllowFlight(true);
         user.setFlying(true);
         user.getPlayer().setInvulnerable(true);
-
-        user.closeInventory();
-        user.clearInventory();
-        user.unlockAll();
 
         if (((GameUser) user).getTeam() != null) {
           Chat teamChat = Server.getChat(((GameUser) user).getTeam().getName());

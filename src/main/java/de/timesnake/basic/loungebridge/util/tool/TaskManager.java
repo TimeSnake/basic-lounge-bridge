@@ -26,4 +26,9 @@ public class TaskManager implements PreStopableTool {
     }
     this.tasks.clear();
   }
+
+  @Override
+  public int getPriority() {
+    return 0;
+  }
 }

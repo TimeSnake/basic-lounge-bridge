@@ -64,6 +64,11 @@ public class StatsManager implements GameTool, ResetableTool, PreCloseableTool, 
     this.sendStatSaveRequest();
   }
 
+  @Override
+  public int getPriority() {
+    return 5;
+  }
+
   public boolean isSaveStats() {
     return saveStats;
   }
