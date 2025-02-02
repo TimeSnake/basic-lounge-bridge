@@ -9,10 +9,10 @@ import de.timesnake.basic.bukkit.util.chat.cmd.CommandListener;
 import de.timesnake.basic.bukkit.util.chat.cmd.Completion;
 import de.timesnake.basic.bukkit.util.chat.cmd.Sender;
 import de.timesnake.basic.bukkit.util.server.ExTime;
-import de.timesnake.basic.game.util.user.Plugin;
 import de.timesnake.basic.loungebridge.util.server.LoungeBridgeServer;
 import de.timesnake.basic.loungebridge.util.tool.advanced.WorldBorderTool;
 import de.timesnake.library.chat.Code;
+import de.timesnake.library.chat.Plugin;
 import de.timesnake.library.commands.PluginCommand;
 import de.timesnake.library.commands.simple.Arguments;
 

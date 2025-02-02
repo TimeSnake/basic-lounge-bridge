@@ -26,12 +26,9 @@ public interface TmpGameServerManager {
 
   GameUser loadUser(Player player);
 
-  /**
-   * Get the game {@link de.timesnake.basic.bukkit.util.chat.Plugin}
-   *
-   * @return Return the plugin
-   */
-  Plugin getGamePlugin();
+  default Plugin getGamePlugin() {
+    return Plugin.GAME;
+  }
 
   /**
    * Called by channel map load message from lounge (map-voting).

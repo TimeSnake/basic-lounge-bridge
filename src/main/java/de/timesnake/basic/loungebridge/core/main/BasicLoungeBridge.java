@@ -5,8 +5,8 @@
 package de.timesnake.basic.loungebridge.core.main;
 
 import de.timesnake.basic.bukkit.util.Server;
-import de.timesnake.basic.game.util.user.Plugin;
 import de.timesnake.basic.loungebridge.util.tool.WorldBorderToolManager;
+import de.timesnake.library.chat.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
